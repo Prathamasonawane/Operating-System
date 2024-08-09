@@ -1,0 +1,28 @@
+/*Implement the c Program to create a child process using fork(),dislpay parent & child process id,child process will display the message "I am child Process" & the parent process should display "I am parent process". */
+
+#include<stdio.h>
+#include<sys/types.h>
+#include<unistd.h>
+int main()
+{
+	int pid=fork();
+	if(pid>0)
+	 {
+	   printf("I am Process\n");
+	   printf("Id:%d\n",getpid());
+	 }
+	 else
+	 {
+	  printf("Failed to create child process");
+	 }
+	 return 0;
+}
+=========================================================================================================
+/*
+Output:-
+bcs@PRATHAMA:~$ gcc Os_fork21slip.c
+bcs@PRATHAMA:~$ ./a.out
+I am Process
+Id:2966
+Failed to create child process
+*/
