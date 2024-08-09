@@ -1,0 +1,43 @@
+/* Write a c program to illustrate the concept of Orphan process.Parent creates a child & terminates before child has finished its task ,so child process become orphan process(Use fork(),sleep(),getpid(),getppid()).. */
+
+#include<stdio.h>
+#include<sys/types.h>
+#include<unistd.h>
+int main()
+{
+  int pid;
+  pid=getpid();
+  printf("Current Process Id is:%d\n",pid);
+  printf("\n Forking Child Process..\n");
+    pid=fork();
+    if(pid<0)
+      {
+        printf("\n Process can not be create");
+      }
+      else
+      {
+        if(pid==0)
+        {
+          printf("\n Child Process is sleeping..");
+          sleep(5);
+          printf("\n Orphan Child Parent Id:%d",getppid());
+        }
+        else
+        {
+          printf("\n Parent Process Completed...........");
+        }
+      }
+      return 0;
+}
+/*
+Output:-
+bcs@PRATHAMA:~$ gcc Os_orphan.c
+bcs@PRATHAMA:~$ ./a.out
+Current Process Id is:3122
+
+ Forking Child Process..
+
+ Parent Process Completed...........
+bcs@PRATHAMA:~$  Child Process is sleeping..
+ Orphan Child Parent Id:1308
+*/         
