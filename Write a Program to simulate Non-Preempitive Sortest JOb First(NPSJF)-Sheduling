@@ -1,0 +1,169 @@
+/*
+Write a Program to simulate Non-Preempitive Sortest JOb First-Sheduling.The arrival time & first CPU-burst for
+different 'n' number of process should be input to algorithm.Assum that the fixed IO waiting time(2 units). The next CPU-burst should be generated ramdomly .
+The output should give Grantt Chart,turnaround time and waiting time for each process.Also find the average waiting time and turnaround time..
+*/
+#include<stdio.h>
+void main()
+{
+	int i,j,temp,btemp,
+	at[6],bt[6],wt[6],tt[6],sum=0,num,proc[6];
+	float avrg,avg;
+	printf("Enter the number of Process:");
+	 scanf("%d",&num);
+	  for(i=0;i<num;i++)
+	   {
+	     printf("\n Enter the Process Number:");
+	      scanf("%d",&proc[i]);
+	     printf("\n Enter the Process Arrival Time:");
+	      scanf("%d",&at[i]);
+	     printf("\n Enter the Process Burst Time:");
+	      scanf("%d",&bt[i]);
+	   }
+	   for(i=0;i<num;i++)
+	    {
+	         if(at[i]==0)
+	          {
+	            temp=at[0];
+	            at[0]=at[i];
+	            at[i]=temp;
+	            btemp=bt[0];
+	            bt[0]=bt[i];
+	            bt[i]=btemp;
+	            temp=proc[0];
+	            proc[0]=proc[i];
+	            proc[i]=temp;
+	          }
+	       }
+	  for(i=1;i<num;i++)
+	    {
+	      for(j=i+1;j<num;j++)
+	       {
+	         if(bt[i]>bt[j])
+	          {
+	            temp=at[i];
+	            at[i]=at[j];
+	            at[j]=temp;
+	            btemp=bt[i];
+	            bt[i]=bt[j];
+	            bt[j]=btemp;
+	            temp=proc[i];
+	            proc[i]=proc[j];
+	            proc[j]=temp;
+	          }
+	       }
+	    }	       
+	  for(i=1;i<num;i++)
+	    {
+	      for(j=i+1;j<num;j++)
+	       {
+	         if(bt[i]==bt[j])
+	          {
+	         if(at[i]>at[j])
+	          {
+	            temp=at[i];
+	            at[i]=at[j];
+	            at[j]=temp;
+	            btemp=bt[i];
+	            bt[i]=bt[j];
+	            bt[j]=btemp;
+	            temp=proc[i];
+	            proc[i]=proc[j];
+	            proc[j]=temp;
+	          }
+	       }
+	    }  
+	    }
+	printf("\n After Sorting On Arrival Time:\n");
+	printf("Process\tArrival Time\tBurst Time\nPriority\n");
+	  for(i=0;i<num;i++)
+	   {
+	     printf("\nP%d\t",proc[i]);
+	     printf("%d\t",at[i]);
+	     printf("%d\t",bt[i]);
+	   }
+	   wt[0]=0;
+	    for(i=0;i<num;i++)
+	     {
+	      wt[i+1]=wt[i]+bt[i];
+	      sum+=(wt[i]-at[i]);
+	     }
+	     wt[num]=wt[num-1]+bt[num-1];
+	     printf("\n The Waiting Time is=\t%d",sum);
+	     avrg=(float)sum/(float)num;
+	     printf("\n The Average Waiting Time is=\t%f",avrg);
+	     sum=0;
+	     for(i=0;i<num;i++)
+	       {
+	         tt[i]=wt[i+1]-at[i];
+	         sum+=tt[i];
+	       }
+	       printf("\n The Sum of Turnaround Time is=\t%d",sum);
+	        avg=(float)sum/(float)num;
+	       printf("\nThe Average Turnaround Time is =\t%f",avg);
+	       printf("\n Gantt Chart\n");	       
+	       printf("-----------------------------------------------------------------\n");
+	       for(i=0;i<num;i++)
+	        {
+	          printf("\t|P%d\t",proc[i]);
+	        }
+	        printf("\n---------------------------------------------------------------\n");
+	        for(i=0;i<=num;i++)
+	         {
+	           printf("%d\t\t",wt[i]);
+	         }
+}
+/*
+Output:-
+bcs@PRATHAMA:~$ ./a.out
+Enter the number of Process:5
+
+ Enter the Process Number:1
+
+ Enter the Process Arrival Time:7
+
+ Enter the Process Burst Time:1
+
+ Enter the Process Number:2
+
+ Enter the Process Arrival Time:3
+
+ Enter the Process Burst Time:2
+
+ Enter the Process Number:3
+
+ Enter the Process Arrival Time:2
+
+ Enter the Process Burst Time:1
+
+ Enter the Process Number:4
+
+ Enter the Process Arrival Time:0
+
+ Enter the Process Burst Time:3
+
+ Enter the Process Number:5
+
+ Enter the Process Arrival Time:1
+
+ Enter the Process Burst Time:5
+
+ After Sorting On Arrival Time:
+Process	Arrival Time	Burst Time
+Priority
+
+P4	0	3	
+P3	2	1	
+P1	7	1	
+P2	3	2	
+P5	1	5	
+ The Waiting Time is=	6
+ The Average Waiting Time is=	1.200000
+ The Sum of Turnaround Time is=	18
+The Average Turnaround Time is =	3.600000
+ Gantt Chart
+-----------------------------------------------------------------
+	|P4		|P3		|P1		|P2		|P5	
+---------------------------------------------------------------
+0		3		4		5		7		12			
+*/	     
