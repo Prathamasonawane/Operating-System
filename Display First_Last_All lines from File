@@ -1,0 +1,166 @@
+/*Que:-Write a C program that behaves likes a shell which display the command prompt "myshell$",it accept the command line & execute it by creating the child process.Also implement the additional command 'typeline' as
+	myshell$ typeline n filename:It will display first n lines of the file..
+	myshell$ typeline -n filename:It will display last n lines of the file..
+	myshell$ typeline a filename:It will display all the lines of the file..
+*/
+
+/*...A.txt...
+First Line
+Second Line
+Third Line
+Fourth Line
+Fifth Line
+Sixth Line
+Seventh Line
+Eight Line
+Ninth Line
+Tenth Line
+*/
+
+#include<stdio.h>
+#include <stdlib.h>
+void main(int argc,char *argv[]);
+int count_lines(char *fname);
+int print_all_lines(char *fname);
+int print_top_lines(char *fname,int cnt);
+int print_bottom_lines(char *fname,int cnt,int tot_lines);
+int tot_lines,cnt,curr_cnt;
+void main(int argc,char *argv[])
+{
+	char *ptr;
+	if(argc!=4)
+	 {
+	   printf("\n Invalid Number Of Arument:\n");
+	 }
+	if(*argv[2]=='+'||*argv[2]=='-')
+	  {
+	    tot_lines=count_lines(argv[3]);
+	    ptr=argv[2];
+	    ptr++;
+	    cnt=atoi(ptr);
+	     if(cnt>tot_lines)
+	      {
+	        printf("\nInvalid Lines Count..\n");
+	        exit(1);
+	      }
+	  }
+	  if(*argv[2]=='+')
+	    print_top_lines(argv[3],cnt);
+	  else
+	    if(*argv[2]=='-')
+	      print_bottom_lines(argv[3],cnt,tot_lines);
+	  else
+	      print_all_lines(argv[3]);
+}
+int count_lines(char *fname)
+{
+	int tot_lines,ch;
+	FILE *fp;
+	fp=fopen(fname,"r");
+	if(fp==NULL)
+	  {
+	    printf("\n Unable to Open file..");
+	    return(-1);
+	  }
+	  tot_lines=0;
+	  ch=fgetc(fp);
+	  while(ch!=EOF)
+	   {
+	     if(ch==10)
+	       tot_lines++;
+	       ch=fgetc(fp);
+	   }
+	    tot_lines++;
+	    fclose(fp);
+	    return(tot_lines-=1);
+}
+int print_all_lines(char *fname)
+{
+	int ch;
+	FILE *fp;
+	fp=fopen(fname,"r");
+	ch=fgetc(fp);
+	while(ch!=EOF)
+	 {
+	   printf("%c",ch);
+	   ch=fgetc(fp);
+	 }
+	 fclose(fp);
+}
+int print_top_lines(char *fname,int cnt)
+{
+	int ch;
+	FILE *fp;
+	curr_cnt=0;
+	fp=fopen(fname,"r");
+	ch=fgetc(fp);
+	while(curr_cnt<cnt)
+	 {
+	  printf("%c",ch);
+	  if(ch==10)
+	   {
+	     curr_cnt++;
+	   }
+	   ch=fgetc(fp);
+	 }
+	 fclose(fp);
+}
+int print_bottom_lines(char *fname,int cnt,int tot_lines)
+{
+	int curr_cnt;
+	int ch;
+	FILE *fp;
+	curr_cnt=0;
+	fp=fopen(fname,"r");
+	ch=fgetc(fp);
+	while(1)
+	{
+	  if(ch==10)
+	    curr_cnt++;
+	  if(curr_cnt>=tot_lines-cnt)
+	  	break;
+	  ch=fgetc(fp);
+	}
+	ch=fgetc(fp);
+	while(ch!=EOF)
+	 {
+	   printf("%c",ch);
+	   ch=fgetc(fp);
+	 }
+	 fclose(fp);
+}
+/*
+Output:-
+bcs@PRATHAMA:~$ gcc typeline.c
+bcs@PRATHAMA:~$ ./a.out typeline +5 A.txt
+First Line
+Second Line
+Third Line
+Fourth Line
+Fifth Line
+bcs@PRATHAMA:~$ ./a.out typeline -5 A.txt
+Sixth Line
+Seventh Line
+Eight Line
+Ninth Line
+Tenth Line
+bcs@PRATHAMA:~$ ./a.out typeline a A.txt
+First Line
+Second Line
+Third Line
+Fourth Line
+Fifth Line
+Sixth Line
+Seventh Line
+Eight Line
+Ninth Line
+Tenth Line
+bcs@PRATHAMA:~$ ./a.out typeline -7 A.txt
+Fourth Line
+Fifth Line
+Sixth Line
+Seventh Line
+Eight Line
+Ninth Line
+Tenth Line
+*/
